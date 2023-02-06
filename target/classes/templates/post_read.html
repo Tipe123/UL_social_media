@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Post read</title>
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css}" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+
+    <style>
+        /*====================create-post section=============*/
+.middle .create-post{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+    background: var(--color-white);
+    padding: 0.4rem var(--card-padding);
+    border-radius: var(--border-radius);
+}
+.middle .create-post input[type="text"] {
+    justify-self: start;
+    width: 100%;
+    padding-left: 1rem;
+    background: transparent;
+    color: var(--color-dark);
+    margin-right: 0rem;
+    border-bottom-right-radius:0px;
+    border-top-right-radius:0px;
+
+}
+
+#create-post{
+
+height: 70px;
+
+}
+
+.profile-photo{
+    width: 2.7rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+img {
+    display: block;
+    width: 100%;
+}
+.btn-primary{
+
+height:70px;
+width:70px;
+border-bottom-left-radius:0px;
+border-top-left-radius:0px;
+}
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="container text-center">
+
+            <div class="card mt-5">
+                <div class="card-body">
+                    <p th:text="${post.getPost_paragraph()}"></p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="middle">
+                <form class="create-post" th:action="@{/addComment}" method="post" th:object="${commentDTO}">
+                    <div class="profile-photo">
+                        <img src="https://image.shutterstock.com/image-vector/default-avatar-profile-icon-vector-260nw-1725655669.jpg">
+                    </div>
+                    <input type="text" placeholder="what's on your mind, Lerato?" th:field="*{comment}" class="form-control" id="create-post" required>
+                    <input type="text" th:field="*{post_id}" value="${post.getId()}"  hidden>
+                    <input type="submit" value="Post" class="btn btn-primary">
+                </form>
+        </div>
+        <div th:each="comment : ${comments}">
+
+            <div class="card mt-5">
+                <p th:text="${comment.getUser().getFirstName()}"> </p>
+                <div class="card-body">
+                    <p th:text="${comment.getComment()}"></p>
+                </div>
+
+        </div>
+
+    </div>
+    </div>
+
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+
+
+
+    /*]]>*/
+    </script>
+
+</body>
+</html>

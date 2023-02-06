@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile page</title>
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css}">
+</head>
+<body>
+<h1>Hello <span th:text="${user.getLastName()}"></span></h1>
+
+<img th:src="${profile_img}" id="img-preview" />
+<form th:action="@{/post_profile}" method="post" th:object="${profile_picture}" id="signup-form">
+
+    <div class="input-group">
+        <input type="file" id="file-upload"
+               required/>
+    </div>
+
+    <div class="input-group">
+        <input type="text" id="image-value" th:field="*{image_link}" required hidden>
+    </div>
+
+    <div class="input-group">
+        <input type="text" id="user-id" th:field="*{user_id}" required hidden>
+    </div>
+</form>
+<!--Create a form to set profile picture-->
+
+<script type="text/javascript" th:src="@{https://unpkg.com/axios/dist/axios.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/profile.js}"></script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/room-locator/upload"
+        const CLOUDINARY_UPLOAD_PRESET = "mkopuho4"
+
+        var signupForm = document.getElementById("signup-form")
+        var imgPreview = document.getElementById("img-preview")
+        var fileUpload = document.getElementById("file-upload")
+        var imageValue =  document.getElementById("image-value")
+        var userValue =  document.getElementById("user-id")
+
+        console.log([[${user.getId()}]])
+       console.log(imgPreview)
+
+        fileUpload.addEventListener("change",(event)=>{
+
+        var file = event.target.files[0];
+        var formData = new FormData();
+        formData.append('file',file);
+        formData.append('upload_preset',CLOUDINARY_UPLOAD_PRESET)
+
+        axios({
+        url:CLOUDINARY_URL,
+        method:'POST',
+        headers:{
+            'Content-Type':'application/x-www-form-urlencoded'
+        },
+        data:formData
+        }).then((response)=>{
+            imgPreview.src = response.data.url
+            handleChange(response.data.url)
+        }).catch((error)=>{
+            console.log(error)
+        })
+    });
+
+       handleChange = (value) =>{
+        imageValue.value = value;
+        userValue.value = [[${user.getId()}]]
+        //Create an element to submit
+
+        var element = document.createElement('button')
+        element.innerHTML = "submit"
+
+        signupForm.appendChild(element)
+
+        }
+
+
+
+
+/*]]>*/
+</script>
+</body>
+</html>
